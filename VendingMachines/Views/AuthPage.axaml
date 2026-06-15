@@ -1,0 +1,114 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VendingMachines.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1200"
+             x:Class="VendingMachines.AuthPage"
+             x:DataType="vm:AuthPageViewModel">
+
+	<Grid Background="#f3f4f6">
+		<Border Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+			<Border Background="White"
+                    Width="400"
+                    Height="600"
+                    CornerRadius="8"
+                    BorderBrush="#e5e7eb"
+                    BorderThickness="1">
+
+				<StackPanel Margin="30" Spacing="20" VerticalAlignment="Center">
+					<TextBlock Text="ООО Торговые Автоматы"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#1f2937"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+					<Border Background="#2563eb"
+                            Width="80"
+                            Height="80"
+                            CornerRadius="40"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,10">
+						<TextBlock Text="👤"
+                                   FontSize="40"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+					</Border>
+
+					<StackPanel Spacing="5">
+						<TextBlock Text="Логин"
+                                   Foreground="#4b5563"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"/>
+						<TextBox Text="{Binding Login}"
+                                 Watermark="Введите логин"
+                                 Padding="12,10"
+                                 CornerRadius="6"
+                                 BorderBrush="#e5e7eb"
+                                 BorderThickness="1"
+                                 FontSize="14"/>
+					</StackPanel>
+
+					<StackPanel Spacing="5">
+						<TextBlock Text="Пароль"
+                                   Foreground="#4b5563"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"/>
+						<TextBox Text="{Binding Password}"
+                                 PasswordChar="●"
+                                 Watermark="Введите пароль"
+                                 Padding="12,10"
+                                 CornerRadius="6"
+                                 BorderBrush="#e5e7eb"
+                                 BorderThickness="1"
+                                 FontSize="14"/>
+					</StackPanel>
+
+					<StackPanel Spacing="10" Margin="0,20,0,0">
+						<Button Content="Войти"
+                                Command="{Binding LoginCommand}"
+                                HorizontalAlignment="Stretch"
+                                Background="#2563eb"
+                                Foreground="White"
+                                Padding="15"
+                                CornerRadius="6"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+								VerticalContentAlignment ="Center"
+								HorizontalContentAlignment="Center"/>
+						<Button Content="Регистрация"
+                                Command="{Binding RegCommand}"
+                                HorizontalAlignment="Stretch"
+                                Background="Transparent"
+                                Foreground="#2563eb"
+                                BorderBrush="#2563eb"
+                                BorderThickness="1"
+                                Padding="15"
+                                CornerRadius="6"
+                                FontSize="14"
+								VerticalContentAlignment ="Center"
+								HorizontalContentAlignment="Center"/>
+					</StackPanel>
+
+					<TextBlock Text="© 2026 ООО Торговые Автоматы"
+                               Foreground="#9ca3af"
+                               FontSize="11"
+                               HorizontalAlignment="Center"
+                               Margin="0,20,0,0"/>
+				</StackPanel>
+			</Border>
+		</Border>
+	</Grid>
+
+	<UserControl.Styles>
+		<Style Selector="TextBox:focus">
+			<Setter Property="BorderBrush" Value="#2563eb"/>
+		</Style>
+		<Style Selector="Button:pointerover">
+			<Setter Property="Opacity" Value="0.9"/>
+		</Style>
+	</UserControl.Styles>
+</UserControl>

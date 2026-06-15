@@ -1,0 +1,172 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VendingMachines.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="4000"
+             x:Class="VendingMachines.RegPage"
+             x:DataType="vm:RegPageViewModel">
+
+	<Grid Background="#f3f4f6">
+		<Border Width="450"
+				Height="800"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="White"
+                CornerRadius="8"
+                BorderBrush="#e5e7eb"
+                BorderThickness="1">
+
+			<StackPanel Margin="30" Spacing="15">
+				<TextBlock Text="Регистрация"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#1f2937"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10"/>
+				<Border Background="#2563eb"
+                        Width="70"
+                        Height="70"
+                        CornerRadius="35"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,15">
+					<TextBlock Text="📝"
+                               FontSize="36"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+				</Border>
+				<StackPanel Spacing="5">
+					<TextBlock Text="Email"
+                               Foreground="#4b5563"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+					<TextBox Text="{Binding Email}"
+                             Watermark="Введите email"
+                             Padding="12,10"
+                             CornerRadius="6"
+                             BorderBrush="#e5e7eb"
+                             BorderThickness="1"
+                             FontSize="14"/>
+				</StackPanel>
+				<StackPanel Spacing="5">
+					<TextBlock Text="Пароль"
+                               Foreground="#4b5563"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+
+					<Grid>
+						<TextBox Text="{Binding Password}"
+                                 Watermark="Введите пароль"
+                                 PasswordChar="●"
+                                 Padding="12,10"
+                                 CornerRadius="6"
+                                 BorderBrush="#e5e7eb"
+                                 BorderThickness="1"
+                                 FontSize="14"
+                                 IsVisible="{Binding ShowPasswordBox}"/>
+						<TextBox Text="{Binding Password}"
+                                 Watermark="Введите пароль"
+                                 Padding="12,10"
+                                 CornerRadius="6"
+                                 BorderBrush="#e5e7eb"
+                                 BorderThickness="1"
+                                 FontSize="14"
+                                 IsVisible="{Binding ShowPasswordText}"/>
+					</Grid>
+				</StackPanel>
+
+				<CheckBox Content="Показать пароль"
+                          IsChecked="{Binding ShowPassword}"
+                          Foreground="#4b5563"
+                          FontSize="13"
+                          Margin="0,5,0,5"/>
+
+				<StackPanel Spacing="5">
+					<TextBlock Text="Код подтверждения"
+                               Foreground="#4b5563"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+					<TextBox Text="{Binding EmailCode}"
+                             Watermark="Введите код из email"
+                             Padding="12,10"
+                             CornerRadius="6"
+                             BorderBrush="#e5e7eb"
+                             BorderThickness="1"
+                             FontSize="14"/>
+				</StackPanel>
+				<Border Background="#f3f4f6"
+                        Padding="15"
+                        CornerRadius="6"
+                        Margin="0,10,0,5">
+					<StackPanel Spacing="10">
+						<TextBlock Text="Капча"
+                                   Foreground="#4b5563"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"/>
+
+						<TextBlock Text="{Binding CaptchaText}"
+                                   HorizontalAlignment="Center"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#2563eb"
+                                   FontFamily="Courier New"/>
+
+						<TextBox Text="{Binding CaptchaAnswer}"
+                                 Watermark="Введите ответ"
+                                 Padding="12,10"
+                                 CornerRadius="6"
+                                 BorderBrush="#e5e7eb"
+                                 BorderThickness="1"
+                                 FontSize="14"/>
+					</StackPanel>
+				</Border>
+
+				<Button Content="Зарегистрироваться"
+                        Command="{Binding RegisterCommand}"
+                        HorizontalAlignment="Stretch"
+                        Background="#2563eb"
+                        Foreground="White"
+                        Padding="15"
+                        CornerRadius="6"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Margin="0,20,0,10"
+                        Cursor="Hand"
+						VerticalContentAlignment ="Center"
+						HorizontalContentAlignment="Center">
+					<Button.Styles>
+						<Style Selector="Button:pointerover">
+							<Setter Property="Background" Value="#1d4ed8"/>
+						</Style>
+					</Button.Styles>
+				</Button>
+
+				<Button Content="Уже есть аккаунт? Войти"
+                        Command="{Binding GoToLoginCommand}"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        Foreground="#2563eb"
+                        BorderThickness="0"
+                        FontSize="13"
+                        Cursor="Hand">
+					<Button.Styles>
+					</Button.Styles>
+				</Button>
+			</StackPanel>
+		</Border>
+	</Grid>
+
+	<UserControl.Styles>
+		<Style Selector="TextBox:focus">
+			<Setter Property="BorderBrush" Value="#2563eb"/>
+		</Style>
+
+		<Style Selector="CheckBox">
+			<Setter Property="Foreground" Value="#4b5563"/>
+		</Style>
+		<Style Selector="CheckBox:pointerover">
+			<Setter Property="Background" Value="#f3f4f6"/>
+		</Style>
+	</UserControl.Styles>
+</UserControl>

@@ -1,0 +1,362 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="using:VendingMachines.Models"
+             xmlns:vm="using:VendingMachines.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="600"
+             x:Class="VendingMachines.CompanyPage"
+             x:DataType="vm:CompanyPageViewModel">
+
+	<Grid ColumnDefinitions="260,*" RowDefinitions="55,*" Background="#f3f4f6">
+		<Border Grid.RowSpan="2" Background="#111827" Padding="15">
+			<StackPanel Spacing="6">
+				<TextBlock Text="Навигация" Foreground="#9ca3af" FontSize="14" Margin="5,10"/>
+				<Button Content="Главная" Classes="MenuButton" Command="{Binding GoToMainPageCommand}"/>
+				<Button Content="Монитор ТА" Classes="MenuButton"/>
+				<Button Content="Детальные отчеты" Classes="MenuButton"/>
+				<Button Content="Учет ТМЦ" Classes="MenuButton"/>
+
+				<TextBlock Text="Администрирование" Foreground="#6b7280" Margin="5,20,5,5"/>
+				<Button Content="Торговые автоматы" Classes="MenuButton" Command="{Binding GoToAdminPageCommand}"/>
+				<Button Content="Компании" Classes="MenuButton Active"/>
+				<Button Content="Пользователи" Classes="MenuButton" Command="{Binding GoToUsersCommand}"/>
+			</StackPanel>
+		</Border>
+		<Border Grid.Column="1" Background="#1f2937" Padding="20,0">
+			<Grid>
+				<TextBlock Text="ООО Торговые Автоматы" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="1" Margin="25" Background="White" CornerRadius="6" Padding="20">
+			<Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="15">
+
+				<StackPanel Grid.Row="0">
+					<TextBlock Text="Компании" FontSize="20" FontWeight="SemiBold"/>
+					<TextBlock Text="{Binding DisplayRangeText}" Foreground="#6b7280"/>
+				</StackPanel>
+
+				<Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<TextBlock Text="Показать"/>
+						<ComboBox Width="70"
+                                  SelectedItem="{Binding PageSize}"
+                                  ItemsSource="{Binding PageSizeOptions}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+						<TextBlock Text="записей"/>
+					</StackPanel>
+
+					<TextBox Grid.Column="1"
+                             Watermark="Поиск по названию компании"
+                             Width="300"
+                             HorizontalAlignment="Right"
+                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5" Margin="10,0">
+						<Button Content="⊞"
+                                Width="40"
+                                Height="35"
+                                Classes="TileButton"
+                                Command="{Binding SetTileViewCommand}"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"/>
+						<Button Content="☷"
+                                Width="40"
+                                Height="35"
+                                Classes="TableButton"
+                                Command="{Binding SetTableViewCommand}"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"/>
+					</StackPanel>
+
+					<Button Grid.Column="3"
+                            Content="+ Добавить"
+                            Margin="15,0"
+                            Command="{Binding AddCompanyCommand}"
+                            Classes="PrimaryButton"/>
+
+					<Button Grid.Column="4"
+                            Content="Экспорт CSV"
+                            Command="{Binding ExportCommand}"
+                            Classes="SecondaryButton"/>
+				</Grid>
+
+				<ScrollViewer Grid.Row="2"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Margin="0,10,0,0">
+					<Grid>
+						<Grid IsVisible="{Binding IsTableView}"
+                              HorizontalAlignment="Center"
+                              Width="1190">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="*"/>
+							</Grid.RowDefinitions>
+							<Border Grid.Row="0" Background="#f3f4f6" Padding="5,8" CornerRadius="4" Margin="0,0,0,2">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="200"/>
+										<ColumnDefinition Width="200"/>
+										<ColumnDefinition Width="200"/>
+										<ColumnDefinition Width="150"/>
+										<ColumnDefinition Width="120"/>
+										<ColumnDefinition Width="200"/>
+										<ColumnDefinition Width="120"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Grid.Column="0" Text="ID" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+									<TextBlock Grid.Column="1" Text="Название" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+									<TextBlock Grid.Column="2" Text="Адрес" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+									<TextBlock Grid.Column="3" Text="Контакты" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+									<TextBlock Grid.Column="4" Text="В работе с" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+									<TextBlock Grid.Column="5" Text="Вышестоящая компания" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+									<TextBlock Grid.Column="6" Text="Действия" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+								</Grid>
+							</Border>
+
+							<ScrollViewer Grid.Row="1"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding PagedCompanies}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<StackPanel Orientation="Vertical"/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate x:DataType="models:Company">
+											<Border BorderThickness="0,0,0,1" BorderBrush="#e5e7eb" Padding="8">
+												<Border.Styles>
+													<Style Selector="Border:nth-child(even)">
+														<Setter Property="Background" Value="White"/>
+													</Style>
+													<Style Selector="Border:nth-child(odd)">
+														<Setter Property="Background" Value="#F9FAFB"/>
+													</Style>
+												</Border.Styles>
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="200"/>
+														<ColumnDefinition Width="200"/>
+														<ColumnDefinition Width="200"/>
+														<ColumnDefinition Width="150"/>
+														<ColumnDefinition Width="120"/>
+														<ColumnDefinition Width="200"/>
+														<ColumnDefinition Width="120"/>
+													</Grid.ColumnDefinitions>
+
+													<TextBlock Grid.Column="0"
+                                                               Text="{Binding Id, StringFormat={}{0:N}}"
+                                                               HorizontalAlignment="Center"/>
+
+													<TextBlock Grid.Column="1"
+                                                               Text="{Binding Name}"
+                                                               HorizontalAlignment="Center"
+                                                               TextWrapping="Wrap"
+                                                               MaxWidth="200"/>
+
+													<TextBlock Grid.Column="2"
+                                                               Text="{Binding Address}"
+                                                               HorizontalAlignment="Center"
+                                                               TextWrapping="Wrap"
+                                                               MaxWidth="200"/>
+
+													<TextBlock Grid.Column="3"
+                                                               Text="{Binding Contacts}"
+                                                               HorizontalAlignment="Center"
+                                                               TextWrapping="Wrap"
+                                                               MaxWidth="150"/>
+
+													<TextBlock Grid.Column="4"
+                                                               Text="{Binding InWorkingWith, StringFormat={}{0:dd.MM.yyyy}}"
+                                                               HorizontalAlignment="Center"/>
+
+													<TextBlock Grid.Column="5"
+                                                               Text="{Binding HighCompany.Name}"
+                                                               HorizontalAlignment="Center"
+                                                               TextWrapping="Wrap"
+                                                               MaxWidth="200"/>
+
+													<StackPanel Grid.Column="6"
+                                                                Orientation="Horizontal"
+                                                                Spacing="10"
+                                                                HorizontalAlignment="Center">
+														<Button Content="✏"
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Foreground="#2563eb"
+                                                                FontSize="16"
+                                                                Cursor="Hand"
+                                                                Command="{Binding $parent[ItemsControl].DataContext.EditCompanyCommand}"
+                                                                CommandParameter="{Binding}"
+                                                                ToolTip.Tip="Редактировать"/>
+														<Button Content="🗑"
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Foreground="#ef4444"
+                                                                FontSize="16"
+                                                                Cursor="Hand"
+                                                                Command="{Binding $parent[ItemsControl].DataContext.DeleteCompanyCommand}"
+                                                                CommandParameter="{Binding}"
+                                                                ToolTip.Tip="Удалить"/>
+													</StackPanel>
+												</Grid>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Grid>
+						<ItemsControl ItemsSource="{Binding PagedCompanies}"
+                                      IsVisible="{Binding IsTileView}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Margin="0,10,0,0"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate x:DataType="models:Company">
+									<Border Background="White"
+                                            BorderBrush="#e5e7eb"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            Padding="15"
+                                            Margin="5"
+                                            Width="320">
+										<StackPanel Spacing="10">
+											<TextBlock Text="{Binding Name}"
+                                                       FontWeight="Bold"
+                                                       FontSize="16"
+                                                       Foreground="#1f2937"/>
+											<TextBlock Text="{Binding Address}"
+                                                       Foreground="#4b5563"
+                                                       TextWrapping="Wrap"/>
+											<TextBlock Text="{Binding Contacts}"
+                                                       Foreground="#4b5563"/>
+											<StackPanel Orientation="Horizontal" Spacing="5">
+												<TextBlock Text="Вышестоящая:"
+                                                           Foreground="#6b7280"
+                                                           FontSize="12"/>
+												<TextBlock Text="{Binding HighCompany.Name}"
+                                                           Foreground="#2563eb"
+                                                           FontSize="12"
+                                                           FontWeight="Medium"/>
+											</StackPanel>
+											<TextBlock Text="{Binding InWorkingWith, StringFormat='В работе с: {0:dd.MM.yyyy}'}"
+                                                       Foreground="#6b7280"
+                                                       FontSize="12"/>
+											<StackPanel Orientation="Horizontal"
+                                                        Spacing="10"
+                                                        HorizontalAlignment="Right">
+												<Button Content="✏"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Foreground="#2563eb"
+                                                        FontSize="16"
+                                                        Cursor="Hand"
+                                                        Command="{Binding $parent[ItemsControl].DataContext.EditCompanyCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        ToolTip.Tip="Редактировать"/>
+												<Button Content="🗑"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Foreground="#ef4444"
+                                                        FontSize="16"
+                                                        Cursor="Hand"
+                                                        Command="{Binding $parent[ItemsControl].DataContext.DeleteCompanyCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        ToolTip.Tip="Удалить"/>
+											</StackPanel>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Grid>
+				</ScrollViewer>
+
+				<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" Margin="0,10">
+					<Button Content="«"
+                            Command="{Binding PrevPageCommand}"
+                            IsEnabled="{Binding CanGoPrev}"/>
+					<TextBlock Text="{Binding CurrentPage}" VerticalAlignment="Center"/>
+					<TextBlock Text="из" VerticalAlignment="Center"/>
+					<TextBlock Text="{Binding TotalPages}" VerticalAlignment="Center"/>
+					<Button Content="»"
+                            Command="{Binding NextPageCommand}"
+                            IsEnabled="{Binding CanGoNext}"/>
+				</StackPanel>
+			</Grid>
+		</Border>
+	</Grid>
+
+	<UserControl.Styles>
+		<Style Selector="Button.MenuButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#d1d5db"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+		<Style Selector="Button.MenuButton:pointerover">
+			<Setter Property="Background" Value="#1f2937"/>
+		</Style>
+		<Style Selector="Button.Active">
+			<Setter Property="Background" Value="#2563eb"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="Button.PrimaryButton">
+			<Setter Property="Background" Value="#2563eb"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="10,8"/>
+		</Style>
+		<Style Selector="Button.PrimaryButton:pointerover">
+			<Setter Property="Background" Value="#1d4ed8"/>
+		</Style>
+		<Style Selector="Button.SecondaryButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#374151"/>
+			<Setter Property="BorderBrush" Value="#e5e7eb"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="10,8"/>
+		</Style>
+		<Style Selector="Button.SecondaryButton:pointerover">
+			<Setter Property="Background" Value="#f9fafb"/>
+		</Style>
+
+		<Style Selector="Button.TileButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#4b5563"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="#e5e7eb"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+		<Style Selector="Button.TableButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#4b5563"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="#e5e7eb"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+
+		<Style Selector="TextBox, ComboBox">
+			<Setter Property="BorderBrush" Value="#e5e7eb"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="10,8"/>
+			<Setter Property="FontSize" Value="14"/>
+		</Style>
+		<Style Selector="TextBox:focus, ComboBox:focus">
+			<Setter Property="BorderBrush" Value="#2563eb"/>
+		</Style>
+	</UserControl.Styles>
+</UserControl>

@@ -1,0 +1,137 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VendingMachines.ViewModels"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+             x:Class="VendingMachines.MainPage"
+             x:DataType="vm:MainPageViewModel">
+
+	<Grid ColumnDefinitions="260,*" RowDefinitions="55,*" Background="#f3f4f6">
+
+		<Border Grid.RowSpan="2" Background="#111827" Padding="15">
+			<StackPanel Spacing="6">
+				<TextBlock Text="Навигация" Foreground="#9ca3af" FontSize="14" Margin="5,10"/>
+				<Button Content="Главная" Classes="MenuButton Active"/>
+				<Button Content="Монитор ТА" Classes="MenuButton"/>
+				<Button Content="Детальные отчеты" Classes="MenuButton"/>
+				<Button Content="Учет ТМЦ" Classes="MenuButton"/>
+				<TextBlock Text="Администрирование" Foreground="#6b7280" Margin="5,20,5,5"/>
+				<Button Content="Торговые автоматы" Classes="MenuButton" Command="{Binding ToAdminPage}"/>
+				<Button Content="Компании" Classes="MenuButton" Command="{Binding ToCompany}"/>
+				<Button Content="Пользователи" Classes="MenuButton" Command="{Binding ToUsers}"/>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Column="1" Background="#1f2937" Padding="20,0">
+			<Grid ColumnDefinitions="*,Auto">
+				<TextBlock Text="ООО Торговые Автоматы" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
+				<TextBlock Grid.Column="1" Text="Главная" Foreground="#9ca3af" VerticalAlignment="Center"/>
+			</Grid>
+		</Border>
+
+		<ScrollViewer Grid.Row="1" Grid.Column="1" Margin="25" VerticalScrollBarVisibility="Auto">
+			<Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*" RowSpacing="20" ColumnSpacing="20">
+				<Border Grid.Row="0" Grid.Column="0" Background="White" CornerRadius="6" Padding="20">
+					<StackPanel Spacing="15">
+						<TextBlock Text="Эффективность сети" FontSize="18" FontWeight="SemiBold" Foreground="#1f2937"/>
+						<lvc:PieChart Series="{Binding EfficiencyPieSeries}"
+                                      Height="150"
+                                      Width="150"
+                                      HorizontalAlignment="Center"
+                                      TooltipPosition="Top"/>
+					</StackPanel>
+				</Border>
+				<Border Grid.Row="0" Grid.Column="1" Background="White" CornerRadius="6" Padding="20">
+					<StackPanel Spacing="15">
+						<TextBlock Text="Состояние сети" FontSize="18" FontWeight="SemiBold" Foreground="#1f2937"/>
+						<lvc:PieChart Series="{Binding NetworkPieSeries}"
+                                      Height="150"
+                                      Width="150"
+                                      HorizontalAlignment="Center"
+                                      TooltipPosition="Top">
+							<lvc:PieChart.Legend/>
+						</lvc:PieChart>
+					</StackPanel>
+				</Border>
+				<Border Grid.Row="1" Grid.Column="0" Background="White" CornerRadius="6" Padding="20">
+					<StackPanel Spacing="15">
+						<TextBlock Text="Сводка" FontSize="18" FontWeight="SemiBold" Foreground="#1f2937"/>
+						<ItemsControl ItemsSource="{Binding SummaryItems}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid ColumnDefinitions="Auto, *" Margin="0,3">
+										<TextBlock Grid.Column="0" Text="{Binding Key}" Foreground="#4b5563" MinWidth="180"/>
+										<TextBlock Grid.Column="1" Text="{Binding Value}" Foreground="#1f2937" FontWeight="Medium" HorizontalAlignment="Right"/>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+				<Border Grid.Row="1" Grid.Column="1" Background="White" CornerRadius="6" Padding="20">
+					<StackPanel Spacing="15">
+						<TextBlock Text="Динамика продаж за последние 10 дней" FontSize="18" FontWeight="SemiBold" Foreground="#1f2937"/>
+						<TabControl>
+							<TabItem Header="По сумме">
+								<lvc:CartesianChart Series="{Binding SalesSumSeries}"
+                                                    XAxes="{Binding XAxes}"
+                                                    YAxes="{Binding YAxes}"
+                                                    Height="200"
+                                                    TooltipPosition="Top"/>
+							</TabItem>
+							<TabItem Header="По количеству">
+								<lvc:CartesianChart Series="{Binding SalesQuantitySeries}"
+                                                    XAxes="{Binding XAxes}"
+                                                    YAxes="{Binding YAxes}"
+                                                    Height="200"
+                                                    TooltipPosition="Top"/>
+							</TabItem>
+						</TabControl>
+						<TextBlock Text="Данные по периоду: от 01.03.2021 по 10.03.2025" Foreground="#9ca3af" FontSize="12"/>
+					</StackPanel>
+				</Border>
+				<Border Grid.Row="2" Grid.ColumnSpan="2" Background="White" CornerRadius="6" Padding="20">
+					<StackPanel Spacing="15">
+						<TextBlock Text="Новости" FontSize="18" FontWeight="SemiBold" Foreground="#1f2937"/>
+						<ItemsControl ItemsSource="{Binding News}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding}" Foreground="#4b5563" TextWrapping="Wrap" Margin="0,3"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+			</Grid>
+		</ScrollViewer>
+	</Grid>
+
+	<UserControl.Styles>
+		<Style Selector="Button.MenuButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#d1d5db"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+		<Style Selector="Button.MenuButton:pointerover">
+			<Setter Property="Background" Value="#1f2937"/>
+		</Style>
+		<Style Selector="Button.Active">
+			<Setter Property="Background" Value="#2563eb"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="TabControl">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="TabItem">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="Foreground" Value="#4b5563"/>
+		</Style>
+		<Style Selector="TabItem:selected">
+			<Setter Property="Foreground" Value="#2563eb"/>
+		</Style>
+	</UserControl.Styles>
+</UserControl>

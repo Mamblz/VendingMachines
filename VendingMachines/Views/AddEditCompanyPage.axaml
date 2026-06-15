@@ -1,0 +1,211 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VendingMachines.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:DataType="vm:AddEditCompanyPageViewModel"
+             x:Class="VendingMachines.AddEditCompanyPage">
+
+    <Grid Background="#f3f4f6">
+        <Grid ColumnDefinitions="260,*" RowDefinitions="55,*">
+
+            <Border Grid.RowSpan="2" Background="#111827" Padding="15">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Навигация" Foreground="#9ca3af" FontSize="14" Margin="5,10"/>
+                    <Button Content="Главная" Classes="MenuButton"/>
+                    <Button Content="Монитор ТА" Classes="MenuButton"/>
+                    <Button Content="Детальные отчеты" Classes="MenuButton"/>
+                    <Button Content="Учет ТМЦ" Classes="MenuButton"/>
+                    <TextBlock Text="Администрирование" Foreground="#6b7280" Margin="5,20,5,5"/>
+                    <Button Content="Торговые автоматы" Classes="MenuButton"/>
+                    <Button Content="Компании" Classes="MenuButton Active"/>
+                    <Button Content="Пользователи" Classes="MenuButton"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Background="#1f2937" Padding="20,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="ООО Торговые Автоматы"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               FontSize="18"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding PageTitle}"
+                               Foreground="#9ca3af"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="25" VerticalScrollBarVisibility="Auto">
+                <Border Background="White" CornerRadius="8" Padding="30">
+                    <StackPanel Spacing="25">
+
+                        <TextBlock Text="{Binding PageTitle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#1F2937"/>
+
+                        <Border BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="20">
+                            <StackPanel Spacing="20">
+
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Вышестоящая компания *" 
+                                               FontSize="13" 
+                                               FontWeight="Medium" 
+                                               Foreground="#4B5563"/>
+                                    <ComboBox ItemsSource="{Binding HighCompanies}"
+                                              SelectedItem="{Binding SelectedHighCompany}"
+                                              DisplayMemberBinding="{Binding Name}"
+                                              PlaceholderText="Выберите вышестоящую компанию"
+                                              BorderBrush="#E5E7EB"
+                                              BorderThickness="1"
+                                              CornerRadius="4"
+                                              Padding="10,8"
+                                              Height="36"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Название компании *" 
+                                               FontSize="13" 
+                                               FontWeight="Medium" 
+                                               Foreground="#4B5563"/>
+                                    <TextBox Text="{Binding CurrentCompany.Name, Mode=TwoWay}"
+                                             Watermark="Введите название компании"
+                                             BorderBrush="#E5E7EB"
+                                             BorderThickness="1"
+                                             CornerRadius="4"
+                                             Padding="10,8"
+                                             Height="36"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Примечания" 
+                                               FontSize="13" 
+                                               FontWeight="Medium" 
+                                               Foreground="#4B5563"/>
+                                    <TextBox Text="{Binding CurrentCompany.Notes, Mode=TwoWay}"
+                                             Watermark="Введите примечания"
+                                             AcceptsReturn="True"
+                                             Height="80"
+                                             BorderBrush="#E5E7EB"
+                                             BorderThickness="1"
+                                             CornerRadius="4"
+                                             Padding="10,8"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Адрес компании *" 
+                                               FontSize="13" 
+                                               FontWeight="Medium" 
+                                               Foreground="#4B5563"/>
+                                    <TextBox Text="{Binding CurrentCompany.Address, Mode=TwoWay}"
+                                             Watermark="Введите адрес компании"
+                                             BorderBrush="#E5E7EB"
+                                             BorderThickness="1"
+                                             CornerRadius="4"
+                                             Padding="10,8"
+                                             Height="36"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Контакты" 
+                                               FontSize="13" 
+                                               FontWeight="Medium" 
+                                               Foreground="#4B5563"/>
+                                    <TextBox Text="{Binding CurrentCompany.Contacts, Mode=TwoWay}"
+                                             Watermark="Телефон, email и т.д."
+                                             BorderBrush="#E5E7EB"
+                                             BorderThickness="1"
+                                             CornerRadius="4"
+                                             Padding="10,8"
+                                             Height="36"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="В работе с" 
+                                               FontSize="13" 
+                                               FontWeight="Medium" 
+                                               Foreground="#4B5563"/>
+                                    <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                                                BorderBrush="#E5E7EB"
+                                                BorderThickness="1"
+                                                CornerRadius="4"
+                                                Padding="8,6"
+                                                Height="36"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" 
+                                            Spacing="10" 
+                                            HorizontalAlignment="Right"
+                                            Margin="0,10,0,0">
+                                    <Button Content="{Binding ButtonText}"
+                                            Command="{Binding SaveCommand}"
+                                            Width="120"
+                                            Height="36"
+                                            Background="#2563EB"
+                                            Foreground="White"
+                                            BorderThickness="0"
+                                            CornerRadius="4"
+                                            FontWeight="SemiBold"
+                                            VerticalContentAlignment="Center"
+                                            HorizontalContentAlignment="Center">
+                                        <Button.Styles>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="Background" Value="#1D4ED8"/>
+                                            </Style>
+                                        </Button.Styles>
+                                    </Button>
+                                    <Button Content="Отменить"
+                                            Command="{Binding CancelCommand}"
+                                            Width="120"
+                                            Height="36"
+                                            Background="White"
+                                            Foreground="#374151"
+                                            BorderBrush="#D1D5DB"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            VerticalContentAlignment="Center"
+                                            HorizontalContentAlignment="Center">
+                                        <Button.Styles>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="Background" Value="#F9FAFB"/>
+                                            </Style>
+                                        </Button.Styles>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+
+    <UserControl.Styles>
+        <Style Selector="Button.MenuButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#d1d5db"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <Style Selector="Button.MenuButton:pointerover">
+            <Setter Property="Background" Value="#1f2937"/>
+        </Style>
+        <Style Selector="Button.Active">
+            <Setter Property="Background" Value="#2563eb"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="TextBox, ComboBox, DatePicker">
+            <Setter Property="BorderBrush" Value="#e5e7eb"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="TextBox:focus, ComboBox:focus, DatePicker:focus">
+            <Setter Property="BorderBrush" Value="#2563eb"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

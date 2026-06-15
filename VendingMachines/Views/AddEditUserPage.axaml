@@ -1,0 +1,180 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VendingMachines.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:DataType="vm:AddEditUserPageViewModel"
+             x:Class="VendingMachines.AddEditUserPage">
+
+	<Grid Background="#f3f4f6">
+		<Grid ColumnDefinitions="260,*" RowDefinitions="55,*">
+
+			<Border Grid.RowSpan="2" Background="#111827" Padding="15">
+				<StackPanel Spacing="6">
+					<TextBlock Text="Навигация" Foreground="#9ca3af" FontSize="14" Margin="5,10"/>
+					<Button Content="Главная" Classes="MenuButton"/>
+					<Button Content="Монитор ТА" Classes="MenuButton"/>
+					<Button Content="Детальные отчеты" Classes="MenuButton"/>
+					<Button Content="Учет ТМЦ" Classes="MenuButton"/>
+					<TextBlock Text="Администрирование" Foreground="#6b7280" Margin="5,20,5,5"/>
+					<Button Content="Торговые автоматы" Classes="MenuButton Active"/>
+					<Button Content="Компании" Classes="MenuButton"/>
+					<Button Content="Пользователи" Classes="MenuButton"/>
+				</StackPanel>
+			</Border>
+
+			<Border Grid.Column="1" Background="#1f2937" Padding="20,0">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Text="ООО Торговые Автоматы"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               FontSize="18"/>
+					<TextBlock Grid.Column="1"
+                               Text="{Binding PageTitle}"
+                               Foreground="#9ca3af"
+                               VerticalAlignment="Center"/>
+				</Grid>
+			</Border>
+
+			<ScrollViewer Grid.Row="1" Grid.Column="1" Margin="25" VerticalScrollBarVisibility="Auto">
+				<Border Background="White" CornerRadius="6" Padding="30">
+					<StackPanel Spacing="20">
+
+						<TextBlock Text="{Binding PageTitle}"
+                                   FontSize="24"
+                                   FontWeight="Bold"/>
+
+						<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                              ColumnSpacing="20" RowSpacing="15">
+
+							<StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+								<TextBlock Text="Email *"/>
+								<TextBox Text="{Binding CurrentUser.Email, Mode=TwoWay}"
+                                         Watermark="Введите email"/>
+							</StackPanel>
+
+							<StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+								<TextBlock Text="Полное имя *"/>
+								<TextBox Text="{Binding CurrentUser.FullName, Mode=TwoWay}"
+                                         Watermark="Введите полное имя"/>
+							</StackPanel>
+
+							<StackPanel Grid.Row="2" Grid.Column="0">
+								<TextBlock Text="Пароль *"/>
+								<TextBox Text="{Binding CurrentUser.Password, Mode=TwoWay}"
+                                         PasswordChar="●"
+                                         Watermark="Введите пароль"/>
+							</StackPanel>
+
+							<StackPanel Grid.Row="2" Grid.Column="1">
+								<TextBlock Text="Подтверждение пароля *"/>
+								<TextBox Text="{Binding ConfirmPassword, Mode=TwoWay}"
+                                         PasswordChar="●"
+                                         Watermark="Подтвердите пароль"/>
+								<TextBlock Text="{Binding PasswordError}"
+                                           Foreground="Red"
+                                           FontSize="11"
+                                           IsVisible="{Binding HasPasswordError}"/>
+							</StackPanel>
+
+							<StackPanel Grid.Row="3" Grid.Column="0">
+								<TextBlock Text="Телефон"/>
+								<TextBox Text="{Binding CurrentUser.Phone, Mode=TwoWay}"
+                                         Watermark="Введите телефон"/>
+							</StackPanel>
+
+							<StackPanel Grid.Row="3" Grid.Column="1">
+								<TextBlock Text="Роль *"/>
+								<ComboBox ItemsSource="{Binding Roles}"
+                                          SelectedItem="{Binding SelectedRole}"
+                                          DisplayMemberBinding="{Binding Name}"/>
+							</StackPanel>
+
+							<StackPanel Grid.Row="4" Grid.ColumnSpan="2">
+								<TextBlock Text="Изображение"/>
+								<Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+									<TextBox Grid.Column="0"
+                                             Text="{Binding CurrentUser.Image, Mode=TwoWay}"
+                                             Watermark="Путь к изображению"/>
+									<Button Grid.Column="1"
+                                            Content="Обзор"
+                                            Padding="20,5"/>
+								</Grid>
+							</StackPanel>
+
+							<Border Grid.Row="5" Grid.ColumnSpan="2"
+                                    BorderBrush="#e5e7eb"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="15">
+								<StackPanel Spacing="10">
+									<TextBlock Text="Права доступа"
+                                               FontWeight="SemiBold"
+                                               FontSize="14"/>
+
+									<Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+										<CheckBox Grid.Column="0"
+                                                  IsChecked="{Binding CurrentUser.IsManager}"
+                                                  Content="Менеджер"/>
+
+										<CheckBox Grid.Column="1"
+                                                  IsChecked="{Binding CurrentUser.IsEngineer}"
+                                                  Content="Инженер"/>
+
+										<CheckBox Grid.Column="2"
+                                                  IsChecked="{Binding CurrentUser.IsOperator}"
+                                                  Content="Оператор"/>
+									</Grid>
+								</StackPanel>
+							</Border>
+
+							<StackPanel Grid.Row="6"
+                                        Grid.ColumnSpan="2"
+                                        Orientation="Horizontal"
+                                        Spacing="10"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,20,0,0">
+								<Button Content="{Binding ButtonText}"
+                                        Command="{Binding SaveCommand}"
+                                        Width="120"
+                                        Classes.Primary="True"
+										VerticalContentAlignment ="Center"
+								HorizontalContentAlignment="Center"/>
+								<Button Content="Отменить"
+                                        Command="{Binding CancelCommand}"
+                                        Width="120"
+										VerticalContentAlignment ="Center"
+								HorizontalContentAlignment="Center"/>
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</Border>
+			</ScrollViewer>
+		</Grid>
+	</Grid>
+
+	<UserControl.Styles>
+		<Style Selector="Button.MenuButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#d1d5db"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+		<Style Selector="Button.MenuButton:pointerover">
+			<Setter Property="Background" Value="#1f2937"/>
+		</Style>
+		<Style Selector="Button.Active">
+			<Setter Property="Background" Value="#2563eb"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="Button.Primary">
+			<Setter Property="Background" Value="#2563eb"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="Button.Primary:pointerover">
+			<Setter Property="Background" Value="#1d4ed8"/>
+		</Style>
+	</UserControl.Styles>
+</UserControl>
